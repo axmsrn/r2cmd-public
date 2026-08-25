@@ -1,0 +1,560 @@
+<UserControl x:Class="R2Cmd.Controls.FilePaneControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    mc:Ignorable="po"
+    GotFocus="UserControl_GotFocus"
+    PreviewKeyDown="UserControl_PreviewKeyDown"
+    TextInput="UserControl_TextInput">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+
+        <!-- Frozen colored icons for optimal performance -->
+        <!-- File Icon -->
+        <DrawingImage x:Key="Ico.File" po:Freeze="True">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 H16 V16 H0 Z">
+                    <GeometryDrawing Geometry="M0,0 H16 V16 H0 Z" Brush="Transparent" />
+                    <GeometryDrawing
+                        Geometry="M3.5,0.5 H9.5 L14.5,5.5 V14.5 A1,1 0 0,1 13.5,15.5 H3.5 A1,1 0 0,1 2.5,14.5 V1.5 A1,1 0 0,1 3.5,0.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#ECF0F1" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#A0A0A0" Thickness="0.8" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M5.5,7.5 H11.5 M5.5,10.5 H11.5 M5.5,13.5 H9.5">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#BDC3C7" Thickness="1" StartLineCap="Round"
+                                EndLineCap="Round" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M9.5,5.5 H14.5 V6 H9.5 Z" Brush="#10000000" />
+                    <GeometryDrawing Geometry="M9.5,0.5 V4.5 A1,1 0 0,0 10.5,5.5 H14.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#D5D8DC" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#A0A0A0" Thickness="0.8" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!-- Folder Icon -->
+        <DrawingImage x:Key="Ico.Folder" po:Freeze="True">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 H16 V16 H0 Z">
+                    <GeometryDrawing Geometry="M0,0 H16 V16 H0 Z" Brush="Transparent" />
+                    <GeometryDrawing Geometry="M0.5,5.5 H15.5 V17 H0.5 Z" Brush="#25000000" />
+                    <GeometryDrawing
+                        Geometry="M0.5,3 A1,1 0 0,1 1.5,2 H6 L7.5,3.5 H14.5 A1,1 0 0,1 15.5,4.5 V14.5 H0.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#BC932C" Offset="0" />
+                                <GradientStop Color="#9D781F" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M2,4 H14 V7.5 H2 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#E8E8E8" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing
+                        Geometry="M0,6.5 A1,1 0 0,1 1,5.5 H15 A1,1 0 0,1 16,6.5 V14.5 A1,1 0 0,1 15,15.5 H1 A1,1 0 0,1 0,14.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#E3C669" Offset="0" />
+                                <GradientStop Color="#CBA23B" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M1,6 H15">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="1">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#FFFFF0" Opacity="0.6" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!-- Archive Icon -->
+        <DrawingImage x:Key="Ico.Archive" po:Freeze="True">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 H16 V16 H0 Z">
+                    <GeometryDrawing Geometry="M0,0 H16 V16 H0 Z" Brush="Transparent" />
+                    <GeometryDrawing Geometry="M0.5,5.5 H15.5 V17 H0.5 Z" Brush="#25000000" />
+                    <GeometryDrawing
+                        Geometry="M0.5,3 A1,1 0 0,1 1.5,2 H6 L7.5,3.5 H14.5 A1,1 0 0,1 15.5,4.5 V14.5 H0.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#BC932C" Offset="0" />
+                                <GradientStop Color="#9D781F" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M2,4 H14 V7.5 H2 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#E8E8E8" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing
+                        Geometry="M0,6.5 A1,1 0 0,1 1,5.5 H15 A1,1 0 0,1 16,6.5 V14.5 A1,1 0 0,1 15,15.5 H1 A1,1 0 0,1 0,14.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#E3C669" Offset="0" />
+                                <GradientStop Color="#CBA23B" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M1,6 H15">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="1">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#FFFFF0" Opacity="0.6" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M8,5.5 V11.5 M7,7 H9 M7,9 H9 M7,11 H9">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="1">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#7D6608" Opacity="0.8" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing
+                        Geometry="M6.5,11.5 A0.5,0.5 0 0,0 9.5,11.5 V14 A0.5,0.5 0 0,1 6.5,14 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#F2F3F4" Offset="0" />
+                                <GradientStop Color="#B2BABB" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#797D7F" Thickness="1" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M7.5,12 V13.5">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="0.5">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#FFFFFF" Opacity="0.7" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!-- Parent Directory Icon -->
+        <DrawingImage x:Key="Ico.FolderUp" po:Freeze="True">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 H16 V16 H0 Z">
+                    <GeometryDrawing Geometry="M0,0 H16 V16 H0 Z" Brush="Transparent" />
+                    <GeometryDrawing Geometry="M0.5,5.5 H15.5 V17 H0.5 Z" Brush="#25000000" />
+                    <GeometryDrawing
+                        Geometry="M0.5,3 A1,1 0 0,1 1.5,2 H6 L7.5,3.5 H14.5 A1,1 0 0,1 15.5,4.5 V14.5 H0.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#BC932C" Offset="0" />
+                                <GradientStop Color="#9D781F" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M2,4 H14 V7.5 H2 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FFFFFF" Offset="0" />
+                                <GradientStop Color="#E8E8E8" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing
+                        Geometry="M0,6.5 A1,1 0 0,1 1,5.5 H15 A1,1 0 0,1 16,6.5 V14.5 A1,1 0 0,1 15,15.5 H1 A1,1 0 0,1 0,14.5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#E3C669" Offset="0" />
+                                <GradientStop Color="#CBA23B" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M1,6 H15">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="1">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#FFFFF0" Opacity="0.6" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M8,7 L11,10 H9.2 V15 H6.8 V10 H5 Z" Brush="#40000000" />
+                    <GeometryDrawing Geometry="M8,6 L11,9 H9.2 V14 H6.8 V9 H5 Z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#5DADE2" Offset="0" />
+                                <GradientStop Color="#2874A6" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#1B4F72" Thickness="0.7" LineJoin="Round" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="M5.4,9 L8,6.4 L10.6,9">
+                        <GeometryDrawing.Pen>
+                            <Pen Thickness="0.6" StartLineCap="Round" EndLineCap="Round">
+                                <Pen.Brush>
+                                    <SolidColorBrush Color="#D4E6F1" Opacity="0.8" />
+                                </Pen.Brush>
+                            </Pen>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!-- Frozen geometries for theme-colored monochrome icons -->
+        <Geometry x:Key="Geom.SshServer" po:Freeze="True">F1 M2,1.5 H14 A1,1 0 0,1 15,2.5 V13.5 A1,1
+            0 0,1 14,14.5 H2 A1,1 0 0,1 1,13.5 V2.5 A1,1 0 0,1 2,1.5 Z M2.2,2.7 V13.3 H13.8 V2.7 Z
+            M4.5,4.8 L7.5,7.5 L4.5,10.2 L5.3,11 L9,7.5 L5.3,4 Z M9.5,10.2 H12.5 V11.4 H9.5 Z</Geometry>
+        <Geometry x:Key="Geom.AddSsh" po:Freeze="True">F1 M8,0.5 A7.5,7.5 0 1,1 7.99,0.5 Z M8,1.7
+            A6.3,6.3 0 1,0 8.01,1.7 Z M7.4,4.5 H8.6 V7.4 H11.5 V8.6 H8.6 V11.5 H7.4 V8.6 H4.5 V7.4
+            H7.4 Z</Geometry>
+        <Geometry x:Key="Geom.WinNetwork" po:Freeze="True">F1 M2,1.5 H14 A1,1 0 0,1 15,2.5 V9.5 A1,1
+            0 0,1 14,10.5 H2 A1,1 0 0,1 1,9.5 V2.5 A1,1 0 0,1 2,1.5 Z M2.2,2.7 V9.3 H13.8 V2.7 Z
+            M7.4,10.5 H8.6 V12.8 H7.4 Z M1.5,12.8 H14.5 V14 H1.5 Z M3.5,14 H4.7 V15.5 H3.5 Z
+            M11.3,14 H12.5 V15.5 H11.3 Z</Geometry>
+
+        <!-- Symlink arrow, frozen. It used to be drawn inside a Viewbox, which is
+             a full extra measure/arrange pass per row for an overlay that almost
+             no row shows. A Path with Stretch scales itself. -->
+        <Geometry x:Key="Geom.SymlinkArrow" po:Freeze="True">M1,7 L7,1 M3.5,1 L7,1 L7,4.5</Geometry>
+
+        <!-- Drive List Template -->
+        <DataTemplate x:Key="DriveItemTemplate">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Path x:Name="DriveIcon" Width="16" Height="16" Stretch="None"
+                    Stroke="{DynamicResource Brush.TextPrimary}" StrokeThickness="1.1"
+                    Fill="Transparent" SnapsToDevicePixels="True" UseLayoutRounding="True"
+                    Data="M2,5 H14 V11 H2 Z M11.5,8 H12.5" />
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0"
+                    FontSize="{DynamicResource AppFilePaneFontSize}" />
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Type}" Value="Removable">
+                    <Setter TargetName="DriveIcon" Property="Data"
+                        Value="M6,2 H10 V5 H6 Z M6.5,5 H9.5 V14 H6.5 Z" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="CDRom">
+                    <Setter TargetName="DriveIcon" Property="Data"
+                        Value="M8,2 A6,6 0 1,1 7.99,2 M8,6.5 A1.5,1.5 0 1,1 7.99,6.5" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Network">
+                    <Setter TargetName="DriveIcon" Property="Data"
+                        Value="M8,2 A6,6 0 1,1 7.99,2 M2,8 H14 M8,2 A3.2,6 0 0,0 8,14 M8,2 A3.2,6 0 0,1 8,14" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <!-- Row Template -->
+        <DataTemplate x:Key="NameCellTemplate">
+            <Grid Margin="0,1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="editBorder" Grid.Column="0" Grid.ColumnSpan="2"
+                    Background="{DynamicResource Brush.Background}"
+                    BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                    Visibility="Collapsed" Margin="-4,-3,4,-3" />
+
+                <!-- Icon Container -->
+                <Grid Grid.Column="0" Width="{DynamicResource AppFileIconSize}"
+                    Height="{DynamicResource AppFileIconSize}" Margin="0,0,6,0"
+                    UseLayoutRounding="True">
+
+                    <Image x:Name="IconImage" Source="{Binding Icon}"
+                        Width="{DynamicResource AppFileIconSize}"
+                        Height="{DynamicResource AppFileIconSize}"
+                        Stretch="Uniform" SnapsToDevicePixels="True"
+                        RenderOptions.BitmapScalingMode="HighQuality" Visibility="Visible" />
+
+                    <Image x:Name="VectorIcon"
+                        Width="{DynamicResource AppFolderIconSize}"
+                        Height="{DynamicResource AppFolderIconSize}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Stretch="Uniform" Visibility="Collapsed" />
+
+                    <Path x:Name="OtherIconPath"
+                        Width="{DynamicResource AppFolderIconSize}"
+                        Height="{DynamicResource AppFolderIconSize}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Stretch="Uniform" Visibility="Collapsed"
+                        Fill="{DynamicResource Brush.TextPrimary}" Opacity="0.65" />
+
+                    <Border x:Name="symlinkOverlay" Width="10" Height="10"
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        Margin="-2,0,0,-2" CornerRadius="2"
+                        Background="{DynamicResource Brush.Surface}"
+                        BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                        SnapsToDevicePixels="True"
+                        Visibility="{Binding IsSymlink, Converter={StaticResource BoolToVisConverter}}"
+                        ToolTip="Symbolic Link">
+                        <Path Data="{StaticResource Geom.SymlinkArrow}" Stretch="Uniform"
+                            Margin="1.5"
+                            Stroke="{DynamicResource Brush.TextPrimary}"
+                            StrokeThickness="1.3" StrokeStartLineCap="Round"
+                            StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                    </Border>
+                </Grid>
+
+                <TextBlock x:Name="txtName" Grid.Column="1" Text="{Binding Name}"
+                    VerticalAlignment="Center" Margin="0,0,8,0" />
+
+                <TextBox x:Name="txtRename" Grid.Column="1" Text="{Binding Name, Mode=OneWay}"
+                    Visibility="Collapsed" Background="Transparent"
+                    Foreground="{DynamicResource Brush.TextPrimary}"
+                    CaretBrush="{DynamicResource Brush.TextPrimary}"
+                    SelectionBrush="{DynamicResource Brush.Selection}"
+                    BorderThickness="0" Padding="0" Margin="-2,0,8,0"
+                    VerticalContentAlignment="Center"
+                    KeyDown="RenameBox_KeyDown" LostFocus="RenameBox_LostFocus">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="TextBox">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0" Focusable="false" />
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Grid>
+
+            <DataTemplate.Triggers>
+                <!-- Standard File -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsFolder}" Value="False" />
+                        <Condition Binding="{Binding Icon}" Value="{x:Null}" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="VectorIcon" Property="Source"
+                        Value="{StaticResource Ico.File}" />
+                </MultiDataTrigger>
+
+                <!-- Edit Mode -->
+                <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                    <Setter TargetName="txtName" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="txtRename" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="editBorder" Property="Visibility" Value="Visible" />
+                </DataTrigger>
+
+                <!-- Folder -->
+                <DataTrigger Binding="{Binding IsFolder}" Value="True">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="VectorIcon" Property="Source"
+                        Value="{StaticResource Ico.Folder}" />
+                </DataTrigger>
+
+                <!-- Archive -->
+                <DataTrigger Binding="{Binding IsArchive}" Value="True">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="VectorIcon" Property="Source"
+                        Value="{StaticResource Ico.Archive}" />
+                </DataTrigger>
+
+                <!-- Parent Directory -->
+                <DataTrigger Binding="{Binding Name}" Value="..">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="VectorIcon" Property="Source"
+                        Value="{StaticResource Ico.FolderUp}" />
+                </DataTrigger>
+
+                <!-- SSH Server -->
+                <DataTrigger Binding="{Binding IconType}" Value="SshServer">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="OtherIconPath" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="OtherIconPath" Property="Data"
+                        Value="{StaticResource Geom.SshServer}" />
+                </DataTrigger>
+
+                <!-- Add SSH -->
+                <DataTrigger Binding="{Binding IconType}" Value="AddSsh">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="OtherIconPath" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="OtherIconPath" Property="Data"
+                        Value="{StaticResource Geom.AddSsh}" />
+                </DataTrigger>
+
+                <!-- Windows Network -->
+                <DataTrigger Binding="{Binding IconType}" Value="WinNetwork">
+                    <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="VectorIcon" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="OtherIconPath" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="OtherIconPath" Property="Data"
+                        Value="{StaticResource Geom.WinNetwork}" />
+                </DataTrigger>
+
+                <!-- Marked Item Text Color -->
+                <DataTrigger Binding="{Binding IsMarked}" Value="True">
+                    <Setter TargetName="txtName" Property="Foreground"
+                        Value="{DynamicResource Brush.MarkedText}" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type GridViewColumnHeader}"
+            BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+            <Setter Property="FontSize" Value="{DynamicResource AppFilePaneFontSize}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderThickness="0,0,1,0"
+                            BorderBrush="{DynamicResource Brush.Border}" Padding="12,4,6,4">
+                            <TextBlock Text="{Binding}" VerticalAlignment="Center"
+                                HorizontalAlignment="Left" />
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- Main Layout -->
+    <DockPanel Margin="4">
+        <!-- Top Tool Area -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+            <DockPanel LastChildFill="False" Margin="0,0,0,4">
+                <ListBox x:Name="lstDrives" DockPanel.Dock="Left"
+                    Style="{DynamicResource Theme.DriveBar}"
+                    ItemContainerStyle="{DynamicResource Theme.DriveBarItem}"
+                    ItemTemplate="{StaticResource DriveItemTemplate}"
+                    SelectionChanged="OnDriveSourceChanged"
+                    Focusable="False" />
+                <TextBlock DockPanel.Dock="Left" FontSize="{DynamicResource AppFilePaneFontSize}"
+                    Foreground="{DynamicResource Brush.TextSecondary}" Margin="8,0,4,0"
+                    VerticalAlignment="Center" x:Name="txtSpace" />
+            </DockPanel>
+
+            <!-- Breadcrumbs Navigation -->
+            <Grid>
+                <!-- Manual Path Input (normal mode) -->
+                <TextBox x:Name="txtPath" Padding="4,3"
+                    Background="{DynamicResource Brush.Surface}"
+                    Foreground="{DynamicResource Brush.TextPrimary}"
+                    BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                    FontSize="{DynamicResource AppFilePaneFontSize}"
+                    KeyDown="OnPathKeyDown"
+                    LostFocus="TxtPath_LostFocus" />
+
+                <!-- Path display for search results (no border, no context menu) -->
+                <Border x:Name="pnlSearchPath" Visibility="Collapsed"
+                    Background="{DynamicResource Brush.Surface}"
+                    BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                    Cursor="Hand"
+                    PreviewMouseRightButtonDown="PnlSearchPath_MouseRightButtonDown">
+                    <TextBlock x:Name="txtSearchPath"
+                        Margin="4,3"
+                        VerticalAlignment="Center"
+                        FontSize="{DynamicResource AppFilePaneFontSize}"
+                        Foreground="{DynamicResource Brush.TextPrimary}"
+                        TextTrimming="CharacterEllipsis" />
+                </Border>
+
+                <!-- Clickable Path Segments (normal mode) -->
+                <Border x:Name="pnlBreadcrumbs" Background="{DynamicResource Brush.Surface}"
+                    BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                    Cursor="IBeam" MouseLeftButtonDown="PnlBreadcrumbs_MouseLeftButtonDown">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="spBreadcrumbs" Orientation="Horizontal" Margin="4,0,0,0"
+                            VerticalAlignment="Center" />
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </StackPanel>
+
+        <!-- List View Area -->
+        <Border BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1">
+            <Grid>
+                <ListView x:Name="lvFiles" FontSize="{DynamicResource AppFilePaneFontSize}"
+                    SelectionMode="Extended"
+                    IsTextSearchEnabled="False" BorderThickness="0"
+                    VirtualizingPanel.IsVirtualizing="True"
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                    KeyboardNavigation.DirectionalNavigation="None"
+                    PreviewMouseLeftButtonDown="LvFiles_PreviewMouseDown"
+                    PreviewMouseLeftButtonUp="LvFiles_PreviewMouseUp"
+                    PreviewKeyDown="LvFiles_PreviewKeyDown"
+                    GotFocus="LvFiles_GotFocus"
+                    KeyDown="LvFiles_KeyDown"
+                    SelectionChanged="LvFiles_SelectionChanged">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem"
+                            BasedOn="{StaticResource {x:Type ListViewItem}}">
+                            <Setter Property="Padding" Value="4,0,4,0" />
+                            <Setter Property="MinHeight"
+                                Value="{DynamicResource AppFilePaneRowHeight}" />
+
+                            <!-- Dimming for hidden entries. This lived in
+                                 MainWindow.Resources, where the pane could never
+                                 see it, so it simply never applied. -->
+                            <Setter Property="Opacity" Value="{Binding ItemOpacity}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" Width="280"
+                                CellTemplate="{StaticResource NameCellTemplate}" />
+                            <GridViewColumn Header="Size" Width="90"
+                                DisplayMemberBinding="{Binding SizeDisplay}" />
+                            <GridViewColumn Header="Modified" Width="140"
+                                DisplayMemberBinding="{Binding ModifiedDisplay}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- Search Overlay -->
+                <Border x:Name="pnlSearch" Visibility="Collapsed"
+                    Background="{DynamicResource Brush.Surface}"
+                    BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1"
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="8,4" Margin="4">
+                    <TextBlock x:Name="txtSearch" FontSize="{DynamicResource AppFilePaneFontSize}"
+                        Foreground="{DynamicResource Brush.TextPrimary}" />
+                </Border>
+            </Grid>
+        </Border>
+    </DockPanel>
+</UserControl>

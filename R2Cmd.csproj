@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>R2Cmd</AssemblyName>
+    <RootNamespace>R2Cmd</RootNamespace>
+    <ApplicationIcon>Assets\appicon.ico</ApplicationIcon>
+
+    <!-- Removes ~28 MB of ICU data. PredefinedCulturesOnly=false lets WPF still
+         create named cultures (they just behave invariantly), avoiding the crash -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PredefinedCulturesOnly>false</PredefinedCulturesOnly>
+
+    <!-- No .pdb symbols in Release output -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpCompress" Version="0.50.4" />
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+  </ItemGroup>
+
+</Project>
