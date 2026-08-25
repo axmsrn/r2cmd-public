@@ -1,0 +1,34 @@
+<Window x:Class="R2Cmd.ConfirmDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Confirm"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    FontFamily="Segoe UI" FontSize="13"
+    MinWidth="380" MaxWidth="560"
+    Background="{DynamicResource Brush.Background}"
+    Foreground="{DynamicResource Brush.TextPrimary}">
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtMessage"
+            TextWrapping="Wrap"
+            Foreground="{DynamicResource Brush.TextPrimary}"
+            Margin="0,0,0,20" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnYes" Content="Yes" MinWidth="90" Margin="0,0,8,0"
+                IsDefault="True" Click="BtnYes_Click" />
+            <Button x:Name="btnNo" Content="No" MinWidth="90" Margin="0,0,8,0"
+                Click="BtnNo_Click" />
+            <Button x:Name="btnCancel" Content="Cancel" MinWidth="90"
+                IsCancel="True" Click="BtnCancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
