@@ -1,0 +1,29 @@
+<Window x:Class="R2Cmd.MessageDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="R2cmd"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        FontFamily="Segoe UI" FontSize="13"
+        MinWidth="360" MaxWidth="620"
+        Background="{DynamicResource Brush.Background}"
+        Foreground="{DynamicResource Brush.TextPrimary}">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtMessage"
+                   TextWrapping="Wrap"
+                   Foreground="{DynamicResource Brush.TextPrimary}"
+                   Margin="0,0,0,18"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnOk" Content="OK" MinWidth="90"
+                    IsDefault="True" IsCancel="True" Click="BtnOk_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

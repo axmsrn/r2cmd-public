@@ -1,0 +1,90 @@
+<Window x:Class="R2Cmd.ProgressWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="File Operation" Width="500" Height="260"
+    WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+    Background="{DynamicResource Brush.Background}"
+    Foreground="{DynamicResource Brush.TextPrimary}"
+    Loaded="Window_Loaded" Closing="Window_Closing"
+    PreviewKeyDown="Window_PreviewKeyDown">
+
+    <Window.Resources>
+        <!-- Progress window buttons: base dark style + visible focus highlight -->
+        <Style x:Key="ProgressButton" TargetType="{x:Type Button}"
+            BasedOn="{StaticResource {x:Type Button}}">
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource Brush.Selection}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Static template: no storyboards, and no dependency on system colors,
+             which used to leak a white background into the dark theme. -->
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="Background" Value="{DynamicResource Brush.SurfaceAlt}" />
+            <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3">
+                            <Grid x:Name="PART_Root" ClipToBounds="True">
+                                <Border x:Name="PART_Track" Background="Transparent" />
+                                <Grid x:Name="PART_Indicator" HorizontalAlignment="Left">
+                                    <Border Background="{TemplateBinding Foreground}"
+                                        CornerRadius="2" Margin="1" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtCurrentFile" Grid.Row="0" Text="Preparing..."
+            TextTrimming="CharacterEllipsis" FontWeight="Bold" Margin="0,0,0,10" />
+
+        <!-- Current file progress -->
+        <ProgressBar x:Name="pbCurrentFile" Grid.Row="1" Height="20" Minimum="0" Maximum="100"
+            Margin="0,0,0,5" />
+        <TextBlock x:Name="txtFileProgress" Grid.Row="2" Text="0%"
+            HorizontalAlignment="Right" FontSize="11" Margin="0,0,0,15"
+            Typography.NumeralAlignment="Tabular" />
+
+        <!-- Overall progress with Tabular numerals to prevent jumping text -->
+        <TextBlock x:Name="txtTotalStatus" Grid.Row="3" Text="Total progress: 0 / 0 files"
+            Margin="0,0,0,5" Typography.NumeralAlignment="Tabular" />
+        <ProgressBar x:Name="pbTotal" Grid.Row="4" Height="20" Minimum="0" Maximum="100"
+            Margin="0,0,0,15" />
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center"
+            VerticalAlignment="Bottom">
+            <Button x:Name="btnBackground" Content="Background" Width="100" Height="30"
+                Margin="0,0,10,0"
+                Style="{StaticResource ProgressButton}" Click="BtnBackground_Click" />
+
+            <!-- NO IsCancel here. This window is shown with Show(), not ShowDialog(),
+                 so IsCancel="True" would try to assign DialogResult and throw
+                 InvalidOperationException. ESC is handled in Window_PreviewKeyDown. -->
+            <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30"
+                Style="{StaticResource ProgressButton}" Click="BtnCancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,78 @@
+<Window x:Class="R2Cmd.ErrorActionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="{Binding DialogTitle}" Width="520" Height="240"
+    WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+    Background="{DynamicResource Brush.Background}"
+    Foreground="{DynamicResource Brush.TextPrimary}"
+    Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!-- Clean style without Windows blue focus rings -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource Brush.Surface}" />
+            <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background"
+                                    Value="{DynamicResource Brush.Hover}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background"
+                                    Value="{DynamicResource Brush.SurfaceAlt}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush"
+                                    Value="{DynamicResource Brush.Accent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" Margin="15" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"
+            Margin="0,0,0,15">
+
+            <!-- Hidden unless the caller can actually repeat the failed step.
+                 Copying has no retry path, deleting does: closing the program
+                 that holds the file and pressing Retry usually just works. -->
+            <Button x:Name="btnRetry" Content="Retry" Width="90" Height="30" Margin="0,0,10,0"
+                Visibility="Collapsed"
+                Click="BtnRetry_Click" />
+
+            <Button x:Name="btnSkipAll" Content="Skip All" Width="90" Height="30" Margin="0,0,10,0"
+                Click="BtnSkipAll_Click" />
+
+            <Button x:Name="btnSkip" Content="Skip" Width="90" Height="30" Margin="0,0,10,0"
+                IsDefault="True"
+                Click="BtnSkip_Click" />
+
+            <Button Content="Cancel" Width="90" Height="30" IsCancel="True" Click="BtnCancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

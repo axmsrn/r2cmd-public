@@ -1,0 +1,137 @@
+<Window x:Class="R2Cmd.EditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    Title="Edit" Width="1000" Height="700"
+    MinWidth="480" MinHeight="320"
+    WindowStartupLocation="CenterOwner"
+    FontFamily="Segoe UI" FontSize="{DynamicResource AppFontSize}"
+    Background="{DynamicResource Brush.Background}"
+    Foreground="{DynamicResource Brush.TextPrimary}"
+    PreviewKeyDown="Window_PreviewKeyDown"
+    PreviewMouseWheel="Window_PreviewMouseWheel">
+
+    <DockPanel>
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom" Padding="8,2"
+            Background="{DynamicResource Brush.Surface}"
+            BorderBrush="{DynamicResource Brush.Border}"
+            BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="65" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal"
+                    VerticalAlignment="Center" Margin="0,0,16,0">
+
+                    <TextBlock x:Name="txtStatusLeft"
+                        TextTrimming="CharacterEllipsis"
+                        Foreground="{DynamicResource Brush.TextSecondary}" />
+
+                    <TextBlock Text="  •  "
+                        Foreground="{DynamicResource Brush.TextSecondary}" />
+
+                    <TextBlock x:Name="txtMode"
+                        Cursor="Hand"
+                        Padding="4,1"
+                        MouseLeftButtonDown="TxtMode_MouseLeftButtonDown"
+                        Foreground="{DynamicResource Brush.TextSecondary}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground"
+                                            Value="{DynamicResource Brush.TextPrimary}" />
+                                        <Setter Property="Background"
+                                            Value="{DynamicResource Brush.Hover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <TextBlock Text="  •  "
+                        Foreground="{DynamicResource Brush.TextSecondary}" />
+
+                    <TextBlock x:Name="txtEncoding"
+                        Cursor="Hand"
+                        Padding="4,1"
+                        MouseLeftButtonDown="TxtEncoding_MouseLeftButtonDown"
+                        Foreground="{DynamicResource Brush.TextSecondary}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground"
+                                            Value="{DynamicResource Brush.TextPrimary}" />
+                                        <Setter Property="Background"
+                                            Value="{DynamicResource Brush.Hover}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <TextBlock x:Name="txtStatusRight"
+                        TextTrimming="CharacterEllipsis"
+                        Foreground="{DynamicResource Brush.TextSecondary}" />
+                </StackPanel>
+
+                <TextBlock x:Name="txtMatches"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    TextAlignment="Right"
+                    Margin="0,0,8,0"
+                    Foreground="{DynamicResource Brush.TextSecondary}" />
+
+                <Button x:Name="btnPrev"
+                    Grid.Column="2"
+                    Content="↑"
+                    Width="24" Height="24"
+                    Padding="0"
+                    Margin="0,0,2,0"
+                    Focusable="False"
+                    Click="BtnPrev_Click"
+                    Cursor="Hand" />
+
+                <Button x:Name="btnNext"
+                    Grid.Column="3"
+                    Content="↓"
+                    Width="24" Height="24"
+                    Padding="0"
+                    Margin="0,0,8,0"
+                    Focusable="False"
+                    Click="BtnNext_Click"
+                    Cursor="Hand" />
+
+                <TextBox x:Name="txtFind"
+                    Grid.Column="4"
+                    Width="180" Height="24"
+                    VerticalContentAlignment="Center"
+                    Padding="4,0"
+                    Style="{DynamicResource Theme.TextBox}"
+                    TextChanged="TxtFind_TextChanged"
+                    KeyDown="TxtFind_KeyDown" />
+            </Grid>
+        </Border>
+
+        <!-- Editor -->
+        <avalonEdit:TextEditor
+            x:Name="txtContent"
+            FontFamily="Cascadia Mono, Consolas, Courier New"
+            FontSize="{DynamicResource AppFontSize}"
+            ShowLineNumbers="True"
+            LineNumbersForeground="{DynamicResource Brush.TextSecondary}"
+            Background="{DynamicResource Brush.Background}"
+            Foreground="{DynamicResource Brush.TextPrimary}"
+            WordWrap="False"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto"
+            TextChanged="TxtContent_TextChanged" />
+    </DockPanel>
+</Window>
